@@ -14,6 +14,136 @@ with open("chicago.csv", "r") as file_read:
     data_list = list(reader)
 # ----- /OPEN .CSV FILE -----
 
+# ----- FUNCTION DEFINITIONS -----
+def column_to_list(data, index):
+    """
+    Create a new list from a given column of a matrix.
+
+    Args:
+        data: Dataset.
+        index: Column index.
+    Returns:
+        List containing the column elements.
+    """
+    column_list = [] 
+    for item in range(0,len(data)): 
+        list_item = data[item][index] 
+        column_list.append(list_item) 
+    return column_list
+
+def count_gender(data_list): 
+    """
+    Count genders within a given list.
+
+    Args:
+        data_list: Dataset.
+    Returns:
+        male: integer of "Male"'s sum
+        famele: integer of "Female"'s sum
+    """
+    male = 0 
+    female = 0 
+    for item in range(0,len(data_list)):
+        if data_list[item][-2] == "Male":
+            male = male + 1
+        if data_list[item][-2] == "Female":
+            female = female + 1
+    return [male, female]
+
+def most_popular_gender(data_list):
+    """
+    Check the most popular gender of a list.
+
+    Args:
+        data_list: List dataset.
+    Returns:
+        answer: string containing the most popular gender
+    """
+    if count_gender(data_list)[0] > count_gender(data_list)[1]: 
+        answer = "Male"
+    elif count_gender(data_list)[0] < count_gender(data_list)[1]:
+        answer = "Female"
+    else:
+        answer = "Equal"
+    return answer
+
+def count_user_types(data_list):
+    """
+    Count user types within a given list.
+
+    Args:
+        data_lisr: Dataset.
+    Returns:
+        intergers: number of customer, number of subscriber, number of dependents
+    """
+    customer = 0
+    subscriber = 0
+    dependent = 0
+    for item in range(0,len(data_list)):
+        if data_list[item][-3] == "Customer":
+            customer = customer + 1
+        if data_list[item][-3] == "Subscriber":
+            subscriber = subscriber + 1
+        if data_list[item][-3] == "Dependent":
+            dependent = dependent + 1
+    return [customer, subscriber, dependent]
+
+def median_list(data_list):
+    """
+    Calculate the median of a sorted list.
+
+    Args:
+        data_list: List dataset.
+    Returns:
+        median_trip: float value of list's median 
+    """
+    if len(trip_duration_list) % 2 == 0:
+        index = int(len(trip_duration_list))
+        median = (trip_duration_list[index] + trip_duration_list[index+1]) / 2
+
+    else:
+        index = int(((len(trip_duration_list))/2)+0.5)
+        median = trip_duration_list[index]
+
+    return median
+
+def count_items(column_list):
+    """"
+    Count types and quantity of elements in a list
+
+    Args: 
+        column_list: list dataset
+    Returns:
+        item_types_list: list of different elements in the list
+        count_items: how many times each element repeat in the list
+    """
+    item_types = []
+    count_items = []
+    item_types_list = []
+
+    item_types = set(column_list)
+    index_max = len(item_types)
+    for index in range(0,index_max):   
+        item = item_types.pop()
+        item_types_list.append(item)
+        print(item)
+        index += 1
+
+    
+    items = len(column_list)
+    
+    for index_types in range(0,len(item_types_list)):
+        counter = 0
+        for index_list in range(0,len(column_list)):
+            if column_list[index_list] == item_types_list[index_types]:
+                counter +=  1
+        count_items.append(counter) 
+    
+    return item_types_list, count_items
+
+# ----- /FUNCTION DEFINITIONS -----
+
+
 # ----- DESIGN -----
 print(".")
 time.sleep(1)
@@ -33,6 +163,7 @@ print(" _   _     _            _ _         \n| | | | __| | __ _  ___(_) |_ _   _
 print("----------------------------------------------------")
 print("Machine Learning & AI Foundations Nanodegree Program")
 print("Project: Explore Chicago Bikeshare Data")
+print("version 2")
 print("----------------------------------------------------")
 print("by Daniel Cruz")
 print(".")
@@ -76,8 +207,8 @@ print("\n\nTASK 1: Printing the first 20 samples")
 print("----------------------------------------------------")
 
 data_list = data_list[1:] 
-for x in range(0,20): 
-    print(data_list[x]) 
+for item in range(0,20): 
+    print(data_list[item]) 
 
 # ----- DESIGN -----
 print("____________________________________________________")
@@ -96,8 +227,8 @@ print("\n ____  \n|___ \ \n  __) |\n / __/ \n|_____|")
 print("\nTASK 2: Printing the genders of the first 20 samples")
 print("----------------------------------------------------")
 
-for x in range(0,20): 
-    print(data_list[x][6]) 
+for item in range(0,20): 
+    print(data_list[item][6]) 
 
 # ----- DESIGN -----
 print("____________________________________________________")
@@ -111,18 +242,6 @@ time.sleep(1)
 print("\n _____ \n|___ / \n  |_ \ \n ___) |\n|____/ ")
 # ----- /DESIGN -----
 
-def column_to_list(data, index):
-    column_list = [] 
-    for x in range(0,len(data)): 
-        list_item = data[x][index] 
-        column_list.append(list_item) 
-    return column_list
-
-    #Args:
-        # data - matrix containing the lists of data
-        # index - index of the column to be converted to list
-    #Returns:
-        # column_list - new list
 
 print("\nTASK 3: Printing the list of genders of the first 20 samples")
 print("----------------------------------------------------")
@@ -148,16 +267,12 @@ print("\n _  _   \n| || |  \n| || |_ \n|__   _|\n   |_|")
 
 male = 0
 female = 0
-
-#count male
-for m in range(0,len(data_list)):
-    if data_list[m][-2] == "Male":
+for item in range(0,len(data_list)):
+    if data_list[item][-2] == "Male":
         male = male + 1
-
-#count female
-for f in range(0,len(data_list)):
-    if data_list[f][-2] == "Female":
+    if data_list[item][-2] == "Female":
         female = female + 1
+
 
 print("\nTASK 4: Printing how many males and females we found")
 print("----------------------------------------------------")
@@ -179,22 +294,6 @@ time.sleep(1)
 print("\n ____  \n| ___| \n|___ \ \n ___) |\n|____/ ")
 # ----- /DESIGN -----
 
-def count_gender(data_list): 
-    male = 0 
-    female = 0 
-    for m in range(0,len(data_list)): 
-        if data_list[m][-2] == "Male": 
-            male = male + 1
-    for f in range(0,len(data_list)): 
-        if data_list[f][-2] == "Female": 
-            female = female + 1  
-    return [male, female]
-
-    #Args:
-        # data _list- matrix containing the lists of data
-    #Returns:
-        # male - sum of 'Male' values within the -2th ( or 6th) column
-        # male - sum of 'Female' values within the -2th ( or 6th) column
 
 print("\nTASK 5: Printing result of count_gender")
 print("----------------------------------------------------")
@@ -219,22 +318,6 @@ time.sleep(1)
 print("\n  __   \n / /_  \n| '_ \ \n| (_) |\n \___/ ")
 # ----- /DESIGN -----
 
-
-def most_popular_gender(data_list): #create a function with data_list as parameter
-    if count_gender(data_list)[0] > count_gender(data_list)[1]: # 
-        answer = "Male"
-    elif count_gender(data_list)[0] < count_gender(data_list)[1]:
-        answer = "Female"
-    else:
-        answer = "Equal"
-    return answer
-
-    #Args:
-        # data _list- matrix containing the lists of data
-    #Returns:
-        # answer - string of the most popular gender
-
-
 print("\nTASK 6: Which one is the most popular gender?")
 print("----------------------------------------------------")
 print("Most popular gender is: ", most_popular_gender(data_list))
@@ -258,24 +341,6 @@ plt.title('Quantity by Gender')
 plt.show(block=True)
 
 
-# function to count user types
-def count_user_types(data_list):
-    customer = 0
-    subscriber = 0
-    for c in range(0,len(data_list)):
-        if data_list[c][-3] == "Customer":
-            customer = customer + 1
-    for s in range(0,len(data_list)):
-        if data_list[s][-3] == "Subscriber":
-            subscriber = subscriber + 1
-    
-    return [customer, subscriber]
-
-        #Args:
-        # data _list- matrix containing the lists of data
-    #Returns:
-        # customer - sum of 'Customer' values within the -3th ( or 5th) column
-        # subscriber - sum of 'Subscriber' values within the -3th ( or 5th) column
 
 # ----- DESIGN -----
 print("____________________________________________________")
@@ -295,7 +360,7 @@ print("----------------------------------------------------")
 
 # graph - user types
 user_types_list = column_to_list(data_list, -3)
-types = ["Customer", "Subscriber"]
+types = ["Customer", "Subscriber","Dependent"]
 quantity = count_user_types(data_list)
 y_pos = list(range(len(types)))
 plt.bar(y_pos, quantity)
@@ -350,37 +415,20 @@ max_trip = 0.
 mean_trip = 0.
 median_trip = 0.
 
-# Convert every value from string to integer
 trip_duration_list = [int(i) for i in trip_duration_list]
-
-# Sort the list
 trip_duration_list.sort()
 
-# Loop to go over every element to count them
 total_trip = 0.
 qtd_trip = int(len(trip_duration_list))
-for x in range(0, qtd_trip -1):
-    total_trip = total_trip + int(trip_duration_list[x])
+for item in range(0, qtd_trip -1):
+    total_trip = total_trip + int(trip_duration_list[item])
 
-# Mean calculation
 mean_trip = total_trip / qtd_trip
-
-# Min trip = first value in the sorted list
 min_trip = trip_duration_list[0]
-
-# Max trip = last value in the sorted list
 max_trip = trip_duration_list[len(trip_duration_list)-1]
 
-# Median calculation
-# List with even numbers
-if len(trip_duration_list) % 2 == 0:
-    index = int(len(trip_duration_list))
-    median_trip = (trip_duration_list[index] + trip_duration_list[index+1]) / 2
-# List with odd numbers
-else:
-    index = int(((len(trip_duration_list))/2)+0.5)
-    median_trip = trip_duration_list[index]
 
+median_trip = median_list(data_list)
 
 print("\nTASK 9: Printing the min, max, mean and median")
 print("----------------------------------------------------")
@@ -407,7 +455,6 @@ time.sleep(1)
 print("\n _  ___  \n/ |/ _ \ \n| | | | |\n| | |_| |\n|_|\___/ ")
 # ----- /DESIGN -----
 
-# check types how many start_stations do we have 
 user_types= set(column_to_list(data_list, 3))
 
 
@@ -443,7 +490,7 @@ input("Press Enter to continue...")
 # TODO: Create a function to count user types without hardcoding the types
 # so we can use this function with a different kind of data.
 print("Will you face it?")
-answer = "no"
+answer = "yes"
 
 
 if answer == "yes":
